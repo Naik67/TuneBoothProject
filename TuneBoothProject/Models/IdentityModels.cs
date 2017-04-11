@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using TuneBooth.Models;
 
 namespace TuneBoothProject.Models
 {
@@ -20,6 +21,10 @@ namespace TuneBoothProject.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Tune> Tunes { get; set; }
+        public DbSet<Artiste> Artistes { get; set; }
+        public DbSet<Album> Albums { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
