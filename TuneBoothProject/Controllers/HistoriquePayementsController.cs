@@ -10,7 +10,7 @@ using TuneBoothProject.Models;
 
 namespace TuneBoothProject.Controllers
 {
-    public class HistoriquePayementsController : Controller
+    public class HistoriquePayementsController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 

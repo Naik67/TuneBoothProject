@@ -13,7 +13,7 @@ using TuneBoothProject.Models;
 
 namespace TuneBoothProject.Controllers
 {
-    public class AlbumsController : Controller
+    public class AlbumsController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 

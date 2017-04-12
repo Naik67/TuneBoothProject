@@ -14,7 +14,7 @@ using TuneBoothProject.Models;
 
 namespace TuneBoothProject.Controllers
 {
-    public class TunesController : Controller
+    public class TunesController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
@@ -33,6 +33,8 @@ namespace TuneBoothProject.Controllers
         // GET: Tunes/Details/5
         public ActionResult Details(int? id)
         {
+            int i = 120;
+            int j = i / 0;
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

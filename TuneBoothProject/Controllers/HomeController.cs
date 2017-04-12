@@ -10,7 +10,7 @@ using TuneBoothProject.Models;
 
 namespace TuneBoothProject.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         ApplicationDbContext db = new ApplicationDbContext();
         public ActionResult Index()

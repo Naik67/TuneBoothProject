@@ -8,7 +8,7 @@ using TuneBoothProject.Models;
 
 namespace TuneBoothProject.Controllers
 {
-    public class MagasinController : Controller
+    public class MagasinController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
