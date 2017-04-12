@@ -151,7 +151,16 @@ namespace TuneBoothProject.Controllers
                     HistoriquePayement hp = new HistoriquePayement();
                     hp.UserID = User.Identity.GetUserId();
                     hp.TuneID = tune.ID;
-                    db.HistoriquePayements.Add(hp);
+
+                    //verification de l'existance
+                    bool exists = false;
+                    foreach(var histo in db.HistoriquePayements.ToList())
+                    {
+                        if (histo.TuneID == hp.TuneID && histo.UserID == hp.UserID)
+                            exists = true;
+                    }
+                    if (!exists)
+                        db.HistoriquePayements.Add(hp);
                 }
             }
             db.SaveChanges();

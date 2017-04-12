@@ -10,7 +10,6 @@ using TuneBoothProject.Models;
 
 namespace TuneBoothProject.Controllers
 {
-    [Authorize]
     public class HomeController : BaseController
     {
         ApplicationDbContext db = new ApplicationDbContext();
