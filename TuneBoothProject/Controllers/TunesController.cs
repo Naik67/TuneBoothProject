@@ -93,6 +93,21 @@ namespace TuneBoothProject.Controllers
                         string filename = Path.GetFileName(Request.Files[upload].FileName);
                         Request.Files[upload].SaveAs(Path.Combine(pathToSave, +tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName)));
 
+                        //Création de l'extrait - @N.
+                        string songname = tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName);
+                        var trackDir = Server.MapPath("~/Musiques");
+                        var trackPath = Path.Combine(trackDir, songname);
+                        var ffmpegDir = Server.MapPath("~/ffmpeg");
+                        var ffmpegPath = Path.Combine(ffmpegDir, "bin/ffmpeg.exe");
+                        var trailerDir = Server.MapPath("~/Trailer");
+                        var trackTrailerPath = Path.Combine(trailerDir, "extract-" + songname);
+                        var trackTrailerUrl = Path.Combine(trailerDir, "extract-" + songname);
+                        System.Diagnostics.Process p = new System.Diagnostics.Process();
+                        p.StartInfo = new System.Diagnostics.ProcessStartInfo(ffmpegPath, "-t 30 -i " + trackPath + " " + trackTrailerPath);
+                        p.Start();
+                        p.WaitForExit();
+
+
                         TempData["shortMessage"] = Request.Files[upload].FileName;
                         file++;
                     }
@@ -225,7 +240,24 @@ namespace TuneBoothProject.Controllers
                 return Error();
             }
         }
-
+        /*
+        public ActionResult Extract(string filename)
+        {
+            //string filename = "5-Rain.mp3";
+            var trackDir = Server.MapPath("~/Musiques");
+            var trackPath = Path.Combine(trackDir, filename);
+            var ffmpegDir = Server.MapPath("~/ffmpeg");
+            var ffmpegPath = Path.Combine(ffmpegDir, "bin/ffmpeg.exe");
+            var trailerDir = Server.MapPath("~/Trailer");
+            var trackTrailerPath = Path.Combine(trailerDir, "extract-"+filename);
+            var trackTrailerUrl = Path.Combine(trailerDir, "extract-"+filename);
+            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            p.StartInfo = new System.Diagnostics.ProcessStartInfo(ffmpegPath, "-t 30 -i " + trackPath + " " + trackTrailerPath);
+            p.Start();
+            p.WaitForExit();
+            return View();
+        }
+        */
         byte[] GetFile(string s)
         {
             System.IO.FileStream fs = System.IO.File.OpenRead(s);
