@@ -327,6 +327,8 @@
     <Content Include="Views\HistoriquePayements\Index.cshtml" />
     <Content Include="Views\Tunes\Purchase.cshtml" />
     <Content Include="Views\Tunes\ConfirmPurchase.cshtml" />
+    <Content Include="Views\Albums\ConfirmPurchase.cshtml" />
+    <Content Include="Views\Albums\Purchase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

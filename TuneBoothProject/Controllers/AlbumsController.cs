@@ -124,6 +124,39 @@ namespace TuneBoothProject.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Purchase(int id)
+        {
+            List<Tune> ltunes = new List<Tune>();
+            foreach (var tune in db.Tunes.ToList())
+            {
+                if (tune.AlbumID == id)
+                {
+                    ltunes.Add(tune);
+                }
+            }
+            ViewBag.tunes = ltunes;
+            ViewBag.album = db.Albums.Find(id);
+            TempData["albumID"] = id;
+            return View();
+        }
+
+        public ActionResult ConfirmPurchase()
+        {
+            int albumid = Int32.Parse(TempData["albumID"].ToString());
+            foreach(var tune in db.Tunes.ToList())
+            {
+                if(tune.AlbumID == albumid)
+                {
+                    HistoriquePayement hp = new HistoriquePayement();
+                    hp.UserID = User.Identity.GetUserId();
+                    hp.TuneID = tune.ID;
+                    db.HistoriquePayements.Add(hp);
+                }
+            }
+            db.SaveChanges();
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
