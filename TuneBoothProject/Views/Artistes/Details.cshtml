@@ -52,6 +52,16 @@
 
     </dl>
 </div>
+<div>
+    <h5>Albums</h5>
+    @foreach (var album in ViewBag.albums)
+    {
+        if (album.ArtisteID == Model.ID)
+        {
+            <p><a href="~/Albums/Details/@album.ID">@album.Titre</a></p>
+        }
+    }
+</div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Back to List", "Index")

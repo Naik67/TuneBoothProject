@@ -19,11 +19,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ArtisteID)
+            Artiste
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ArtisteID)
+            <a href="~/Artistes/Details/@ViewBag.artiste.ID">@ViewBag.artiste.NomArtiste</a>
         </dd>
 
         <dt>
@@ -52,7 +52,19 @@
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<div>
+    <h5>Musiques</h5>
+    @foreach(var tune in ViewBag.tunes)
+    {
+        if(tune.AlbumID == Model.ID)
+        {
+            <p><a href="~/Tunes/Details/@tune.ID">@tune.Titre</a></p>
+        }
+    }
+</div>
+
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>

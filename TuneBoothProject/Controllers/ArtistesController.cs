@@ -35,6 +35,7 @@ namespace TuneBoothProject.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.albums = db.Albums.ToList();
             return View(artiste);
         }
 

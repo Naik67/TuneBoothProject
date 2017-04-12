@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TuneBooth.Models.Album>
+﻿@model TuneBooth.Models.ModelsVM
 
 @{
     ViewBag.Title = "Index";
@@ -12,30 +12,30 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Titre)
+            @Html.DisplayNameFor(model => model.Album.Titre)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ArtisteID)
+            Artiste
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateSortie)
+            @Html.DisplayNameFor(model => model.Album.DateSortie)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Genre)
+            @Html.DisplayNameFor(model => model.Album.Genre)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Prix)
+            @Html.DisplayNameFor(model => model.Album.Prix)
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.Albums) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Titre)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ArtisteID)
+            <a href="~/Artistes/Details/@item.ArtisteID">@Model.Artistes.Find(x => x.ID == item.ArtisteID).NomArtiste</a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.DateSortie)
