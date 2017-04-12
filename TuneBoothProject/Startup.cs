@@ -36,6 +36,7 @@ namespace TuneBoothProject
                 var user = new ApplicationUser();
                 user.UserName = "NaiKévin";
                 user.Email = "admin@admin.com";
+                user.UserName = "admin";
 
                 string userPWD = "Bl@123";
 

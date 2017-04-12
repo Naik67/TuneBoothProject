@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -20,6 +21,8 @@ namespace TuneBoothProject.Controllers
         // GET: Tunes
         public ActionResult Index()
         {
+
+            ViewBag.Message = TempData["shortMessage"];
             ModelsVM vm = new ModelsVM();
             vm.Albums = db.Albums.ToList();
             vm.Artistes = db.Artistes.ToList();
@@ -47,6 +50,7 @@ namespace TuneBoothProject.Controllers
         // GET: Tunes/Create
         public ActionResult Create()
         {
+            ViewBag.Message = "get";
             return View();
         }
 
@@ -55,31 +59,79 @@ namespace TuneBoothProject.Controllers
         // plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Create([Bind(Include = "ID,Titre,ArtisteID,Prix,DateSortie,Genre,Format,AlbumID")] Tune tune)
         {
-            if (ModelState.IsValid)
+            ViewBag.Message = "début";
+            if (User.Identity.IsAuthenticated)
             {
-                db.Tunes.Add(tune);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
 
-            return View(tune);
+                var user = User.Identity;
+                ViewBag.Name = user.Name;
+
+                ViewBag.displayMenu = "No";
+
+                if (!isAdminUser())
+                {
+                    ViewBag.displayMenu = "Yes";
+                    if (ModelState.IsValid)
+                    {
+                        if (!Directory.Exists(Server.MapPath("~/Musiques")))
+                            Directory.CreateDirectory(Server.MapPath("~/Musiques"));
+                        foreach (string upload in Request.Files)
+                        {
+                            if (Request.Files[upload].ContentLength == 0) continue;
+                            string pathToSave = Server.MapPath("~/Musiques/");
+                            string filename = Path.GetFileName(Request.Files[upload].FileName);
+                            Request.Files[upload].SaveAs(Path.Combine(pathToSave, filename));
+                        }
+
+                        TempData["shortMessage"] = "Musique ajoutée";
+                        db.Tunes.Add(tune);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+
+                    return View(tune);
+                }
+                else
+                    return View("Error");
+            }
+            else
+                return View("Error");
         }
 
         // GET: Tunes/Edit/5
         public ActionResult Edit(int? id)
         {
-            if (id == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                var user = User.Identity;
+                ViewBag.Name = user.Name;
+
+                ViewBag.displayMenu = "No";
+
+                if (isAdminUser())
+                {
+                    ViewBag.displayMenu = "Yes";
+
+                    if (id == null)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    }
+                    Tune tune = db.Tunes.Find(id);
+                    if (tune == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(tune);
+                }
+                else
+                    return View("Error");
             }
-            Tune tune = db.Tunes.Find(id);
-            if (tune == null)
-            {
-                return HttpNotFound();
-            }
-            return View(tune);
+            else
+                return View("Error");
         }
 
         // POST: Tunes/Edit/5
