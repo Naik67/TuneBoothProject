@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TuneBooth.Models.Tune>
+﻿@model TuneBooth.Models.ModelsVM
 
 @{
     ViewBag.Title = "Index";
@@ -12,37 +12,37 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Titre)
+            @Html.DisplayNameFor(model => model.Tune.Titre)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ArtisteID)
+            Artiste
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Prix)
+            @Html.DisplayNameFor(model => model.Tune.Prix)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateSortie)
+            @Html.DisplayNameFor(model => model.Tune.DateSortie)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Genre)
+            @Html.DisplayNameFor(model => model.Tune.Genre)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Format)
+            @Html.DisplayNameFor(model => model.Tune.Format)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AlbumID)
+            Album
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.Tunes) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Titre)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ArtisteID)
-        </td>
+            <a href="~/Artistes/Details/@item.ArtisteID">@Model.Artistes.Find(x => x.ID == item.ArtisteID).NomArtiste</a>
+</td>
         <td>
             @Html.DisplayFor(modelItem => item.Prix)
         </td>
@@ -56,8 +56,8 @@
             @Html.DisplayFor(modelItem => item.Format)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.AlbumID)
-        </td>
+            <a href="~/Albums/Details/@item.AlbumID">@Model.Albums.Find(x => x.ID == item.AlbumID).Titre</a>
+</td>
         <td>
                  |
             @Html.ActionLink("Details", "Details", new { id=item.ID }) |

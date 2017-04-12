@@ -19,12 +19,12 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ArtisteID)
+            Artiste
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ArtisteID)
-        </dd>
+            <a href="~/Artistes/Details/@ViewBag.artiste.ID">@ViewBag.artiste.NomArtiste</a>
+</dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Prix)
@@ -59,12 +59,12 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.AlbumID)
+            Album
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.AlbumID)
-        </dd>
+            <a href="~/Albums/Details/@ViewBag.album.ID">@ViewBag.album.Titre</a>
+</dd>
 
     </dl>
 </div>

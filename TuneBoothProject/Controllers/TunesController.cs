@@ -20,7 +20,11 @@ namespace TuneBoothProject.Controllers
         // GET: Tunes
         public ActionResult Index()
         {
-            return View(db.Tunes.ToList());
+            ModelsVM vm = new ModelsVM();
+            vm.Albums = db.Albums.ToList();
+            vm.Artistes = db.Artistes.ToList();
+            vm.Tunes = db.Tunes.ToList();
+            return View(vm);
         }
 
         // GET: Tunes/Details/5
@@ -35,6 +39,8 @@ namespace TuneBoothProject.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.artiste = db.Artistes.Find(tune.ArtisteID);
+            ViewBag.album = db.Albums.Find(tune.AlbumID);
             return View(tune);
         }
 
