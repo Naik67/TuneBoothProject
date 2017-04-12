@@ -6,18 +6,47 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using TuneBooth.Models;
 using TuneBoothProject.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace TuneBoothProject.Controllers
 {
-    public class PlaylistsController : Controller
+    [Authorize]
+    public class PlaylistsController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Playlists
         public ActionResult Index()
         {
-            return View(db.Playlists.ToList());
+            ModelsVM vm = new ModelsVM();
+            vm.Tunes = db.Tunes.ToList();
+            vm.UserID = User.Identity.GetUserId();
+            foreach (var pl in db.Playlists.ToList())
+            {
+                if (pl.UserID == User.Identity.GetUserId())
+                {
+                    vm.Playlists.Add(pl);
+                }
+            }
+            return View(vm);
+        }
+
+        // GET: Playlists/AllTunes
+        public ActionResult AllTunes()
+        {
+            ModelsVM vm = new ModelsVM();
+            vm.UserID = User.Identity.GetUserId();
+            foreach (var hp in db.HistoriquePayements.ToList())
+            {
+                if (hp.UserID == User.Identity.GetUserId())
+                {
+                    vm.Tunes.Add(db.Tunes.Find(hp.TuneID));
+                }
+            }
+            return View(vm);
         }
 
         // GET: Playlists/Details/5
@@ -48,6 +77,7 @@ namespace TuneBoothProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ID,UserID,Nom")] Playlist playlist)
         {
+            playlist.UserID = User.Identity.GetUserId();
             if (ModelState.IsValid)
             {
                 db.Playlists.Add(playlist);
@@ -80,6 +110,7 @@ namespace TuneBoothProject.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,UserID,Nom")] Playlist playlist)
         {
+            playlist.UserID = User.Identity.GetUserId();
             if (ModelState.IsValid)
             {
                 db.Entry(playlist).State = EntityState.Modified;

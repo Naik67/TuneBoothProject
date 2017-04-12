@@ -26,6 +26,7 @@ namespace TuneBoothProject.Models
         public DbSet<Album> Albums { get; set; }
         public DbSet<HistoriquePayement> HistoriquePayements { get; set; }
         public DbSet<Playlist> Playlists { get; set; }
+        public DbSet<PlaylistCompo> PlaylistCompoes { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)

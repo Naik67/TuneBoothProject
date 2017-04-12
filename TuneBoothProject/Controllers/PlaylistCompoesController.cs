@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -8,114 +6,112 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using TuneBooth.Models;
 using TuneBoothProject.Models;
 
 namespace TuneBoothProject.Controllers
 {
     [Authorize]
-    public class ArtistesController : BaseController
+    public class PlaylistCompoesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: Artistes
+        // GET: PlaylistCompoes
         public ActionResult Index()
         {
-            return View(db.Artistes.ToList());
+            return View(db.PlaylistCompoes.ToList());
         }
 
-        // GET: Artistes/Details/5
+        // GET: PlaylistCompoes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Artiste artiste = db.Artistes.Find(id);
-            if (artiste == null)
+            PlaylistCompo playlistCompo = db.PlaylistCompoes.Find(id);
+            if (playlistCompo == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.albums = db.Albums.ToList();
-            return View(artiste);
+            return View(playlistCompo);
         }
 
-        // GET: Artistes/Create
+        // GET: PlaylistCompoes/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Artistes/Create
+        // POST: PlaylistCompoes/Create
         // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
         // plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Nom,Prenom,NomArtiste,DateNaissance,Biographie")] Artiste artiste)
+        public ActionResult Create([Bind(Include = "ID,PlaylistID,TuneID")] PlaylistCompo playlistCompo)
         {
             if (ModelState.IsValid)
             {
-                db.Artistes.Add(artiste);
+                db.PlaylistCompoes.Add(playlistCompo);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(artiste);
+            return View(playlistCompo);
         }
 
-        // GET: Artistes/Edit/5
+        // GET: PlaylistCompoes/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Artiste artiste = db.Artistes.Find(id);
-            if (artiste == null)
+            PlaylistCompo playlistCompo = db.PlaylistCompoes.Find(id);
+            if (playlistCompo == null)
             {
                 return HttpNotFound();
             }
-            return View(artiste);
+            return View(playlistCompo);
         }
 
-        // POST: Artistes/Edit/5
+        // POST: PlaylistCompoes/Edit/5
         // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
         // plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Nom,Prenom,NomArtiste,DateNaissance,Biographie")] Artiste artiste)
+        public ActionResult Edit([Bind(Include = "ID,PlaylistID,TuneID")] PlaylistCompo playlistCompo)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(artiste).State = EntityState.Modified;
+                db.Entry(playlistCompo).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(artiste);
+            return View(playlistCompo);
         }
 
-        // GET: Artistes/Delete/5
+        // GET: PlaylistCompoes/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Artiste artiste = db.Artistes.Find(id);
-            if (artiste == null)
+            PlaylistCompo playlistCompo = db.PlaylistCompoes.Find(id);
+            if (playlistCompo == null)
             {
                 return HttpNotFound();
             }
-            return View(artiste);
+            return View(playlistCompo);
         }
 
-        // POST: Artistes/Delete/5
+        // POST: PlaylistCompoes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Artiste artiste = db.Artistes.Find(id);
-            db.Artistes.Remove(artiste);
+            PlaylistCompo playlistCompo = db.PlaylistCompoes.Find(id);
+            db.PlaylistCompoes.Remove(playlistCompo);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -128,26 +124,5 @@ namespace TuneBoothProject.Controllers
             }
             base.Dispose(disposing);
         }
-
-        public Boolean isAdminUser()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                var user = User.Identity;
-                ApplicationDbContext context = new ApplicationDbContext();
-                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-                var s = UserManager.GetRoles(user.GetUserId());
-                if (s[0].ToString() == "Admin")
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return false;
-        }
-
     }
 }

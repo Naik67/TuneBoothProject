@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TuneBoothProject.Models.Playlist>
+﻿@model TuneBooth.Models.ModelsVM
 
 @{
     ViewBag.Title = "Index";
@@ -12,26 +12,26 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.UserID)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Nom)
+            Nom
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+
+    <tr>
+        <th>
+            @Html.ActionLink("Mes musiques", "AllTunes")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var pl in Model.Playlists) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.UserID)
+            @Html.ActionLink(@pl.Nom, "Edit", new { id = pl.ID })
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Nom)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Delete", "Delete", new { id=pl.ID })
         </td>
     </tr>
 }
