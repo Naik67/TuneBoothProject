@@ -168,6 +168,7 @@ namespace TuneBoothProject.Controllers
             {
                 db.Entry(tune).State = EntityState.Modified;
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             return View(tune);
@@ -223,6 +224,13 @@ namespace TuneBoothProject.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Tune tune = db.Tunes.Find(id);
+            string sbase = tune.ID + "-" + tune.Titre + "." + tune.Format;
+            string file = Path.Combine(Server.MapPath("~/Musiques"), sbase);
+            string extract = Path.Combine(Server.MapPath("~/Trailer"), "extract-"+sbase);
+            if (System.IO.File.Exists(file))
+                System.IO.File.Delete(file);
+            if (System.IO.File.Exists(extract))
+                System.IO.File.Delete(extract);
             db.Tunes.Remove(tune);
             db.SaveChanges();
             return RedirectToAction("Index");
