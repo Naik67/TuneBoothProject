@@ -198,6 +198,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AlbumsController.cs" />
     <Compile Include="Controllers\ArtistesController.cs" />
+    <Compile Include="Controllers\HistoriquePayementsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MagasinController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -216,6 +217,14 @@
     <Compile Include="Migrations\201704112301338_director.cs" />
     <Compile Include="Migrations\201704112301338_director.Designer.cs">
       <DependentUpon>201704112301338_director.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704121032495_initial1.cs" />
+    <Compile Include="Migrations\201704121032495_initial1.Designer.cs">
+      <DependentUpon>201704121032495_initial1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704121036204_director1.cs" />
+    <Compile Include="Migrations\201704121036204_director1.Designer.cs">
+      <DependentUpon>201704121036204_director1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -304,6 +313,11 @@
     <Content Include="Views\Tunes\Index.cshtml" />
     <Content Include="Views\Magasin\Index.cshtml" />
     <Content Include="Views\Magasin\Search.cshtml" />
+    <Content Include="Views\HistoriquePayements\Create.cshtml" />
+    <Content Include="Views\HistoriquePayements\Delete.cshtml" />
+    <Content Include="Views\HistoriquePayements\Details.cshtml" />
+    <Content Include="Views\HistoriquePayements\Edit.cshtml" />
+    <Content Include="Views\HistoriquePayements\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -326,6 +340,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704112301338_director.resx">
       <DependentUpon>201704112301338_director.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704121032495_initial1.resx">
+      <DependentUpon>201704121032495_initial1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704121036204_director1.resx">
+      <DependentUpon>201704121036204_director1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

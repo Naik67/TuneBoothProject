@@ -13,13 +13,5 @@
 
 @foreach ( var music in ViewBag.Tunes)
 {
-    
     <h3><a href="~/Tunes/Details/@music.ID">@music.Titre</a></h3>
-        <ul>
-            <li>@music.ArtisteID</li>
-            <li>@music.AlbumID</li>
-            <li>@music.Genre</li>
-            <li>@music.Format</li>
-            <li>@music.Prix €</li>
-        </ul>
 }
