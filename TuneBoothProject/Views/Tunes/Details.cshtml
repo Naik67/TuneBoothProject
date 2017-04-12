@@ -71,5 +71,6 @@
 <p>
     @Html.ActionLink("Acheter", "Purchase", new { id = Model.ID }) |
     @Html.ActionLink("Editer", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Retour à la liste", "Index")
+    @Html.ActionLink("Retour à la liste", "Index") |
+    @Html.ActionLink("Télécharger", "Download", new { id = Model.ID })
 </p>

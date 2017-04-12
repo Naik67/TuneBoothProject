@@ -14,6 +14,7 @@ using TuneBoothProject.Models;
 
 namespace TuneBoothProject.Controllers
 {
+    [Authorize]
     public class TunesController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -25,7 +26,6 @@ namespace TuneBoothProject.Controllers
         // GET: Tunes
         public ActionResult Index()
         {
-
             ViewBag.Message = TempData["shortMessage"];
             ModelsVM vm = new ModelsVM();
             vm.Albums = db.Albums.ToList();
@@ -42,6 +42,7 @@ namespace TuneBoothProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Tune tune = db.Tunes.Find(id);
+            TempData["tuneID"] = id;
             if (tune == null)
             {
                 return HttpNotFound();
@@ -76,46 +77,42 @@ namespace TuneBoothProject.Controllers
             ViewBag.Message = "début";
             if (User.Identity.IsAuthenticated)
             {
-                if (!isAdminUser())
+                if (ModelState.IsValid)
                 {
-                    if (ModelState.IsValid)
+                    int file = 0;
+                    if (!Directory.Exists(Server.MapPath("~/Musiques")))
+                        Directory.CreateDirectory(Server.MapPath("~/Musiques"));
+                    foreach (string upload in Request.Files)
                     {
-                        int file = 0;
-                        if (!Directory.Exists(Server.MapPath("~/Musiques")))
-                            Directory.CreateDirectory(Server.MapPath("~/Musiques"));
-                        foreach (string upload in Request.Files)
-                        {
-                            if (Request.Files[upload].ContentLength == 0) continue;
-                            if (IsMediaFile(Request.Files[upload].FileName)) continue;
+                        if (Request.Files[upload].ContentLength == 0) continue;
+                        if (IsMediaFile(Request.Files[upload].FileName)) continue;
 
-                            string pathToSave = Server.MapPath("~/Musiques/");
-                            string filename = Path.GetFileName(Request.Files[upload].FileName);
-                            Request.Files[upload].SaveAs(Path.Combine(pathToSave, +tune.ID+"-"+tune.Titre + Path.GetExtension(Request.Files[upload].FileName)));
-                            file++;
-                            TempData["shortMessage"] = Request.Files[upload].FileName;
-                        }
-                        if(file>0)
-                        {
-                            //TempData["shortMessage"] = "Musique ajoutée";
-                            db.Tunes.Add(tune);
-                            db.SaveChanges();
-                            return RedirectToAction("Index");
-                        }
-                        else
-                        {
-                            TempData["shortMessage"] = "Fichier manquant ou au mauvais format";
-                            ViewBag.Message = "Fichier manquant";
-                            return RedirectToAction("Index");
-                        }
+                        string pathToSave = Server.MapPath("~/Musiques/");
+                        string filename = Path.GetFileName(Request.Files[upload].FileName);
+                        Request.Files[upload].SaveAs(Path.Combine(pathToSave, +tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName)));
+
+                        TempData["shortMessage"] = Request.Files[upload].FileName;
+                        file++;
                     }
-
-                    return View(tune);
+                    if (file > 0)
+                    {
+                        //TempData["shortMessage"] = "Musique ajoutée";
+                        db.Tunes.Add(tune);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        TempData["shortMessage"] = "Fichier manquant ou au mauvais format";
+                        ViewBag.Message = "Fichier manquant";
+                        return RedirectToAction("Index");
+                    }
                 }
-                else
-                    return View("Error");
+
+                return View(tune);
             }
             else
-                return View("Error");
+                return RedirectToAction("Error");
         }
 
         // GET: Tunes/Edit/5
@@ -127,25 +124,16 @@ namespace TuneBoothProject.Controllers
                 var user = User.Identity;
                 ViewBag.Name = user.Name;
 
-                ViewBag.displayMenu = "No";
-
-                if (isAdminUser())
+                if (id == null)
                 {
-                    ViewBag.displayMenu = "Yes";
-
-                    if (id == null)
-                    {
-                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                    }
-                    Tune tune = db.Tunes.Find(id);
-                    if (tune == null)
-                    {
-                        return HttpNotFound();
-                    }
-                    return View(tune);
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                else
-                    return View("Error");
+                Tune tune = db.Tunes.Find(id);
+                if (tune == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(tune);
             }
             else
                 return View("Error");
@@ -195,8 +183,19 @@ namespace TuneBoothProject.Controllers
             HistoriquePayement hp = new HistoriquePayement();
             hp.UserID = User.Identity.GetUserId();
             hp.TuneID = tuneid;
-            db.HistoriquePayements.Add(hp);
-            db.SaveChanges();
+
+            //verification si la musique a déjà été achetée
+            bool exists = false;
+            foreach (var histo in db.HistoriquePayements.ToList())
+            {
+                if (histo.TuneID == hp.TuneID && histo.UserID == hp.UserID)
+                    exists = true;
+            }
+            if (!exists)
+            {
+                db.HistoriquePayements.Add(hp);
+                db.SaveChanges();
+            }
             return View();
         }
 
@@ -209,6 +208,32 @@ namespace TuneBoothProject.Controllers
             db.Tunes.Remove(tune);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Download(int id)
+        {
+            try
+            {
+                Tune t = db.Tunes.Find(id);
+                string fullName = Path.Combine(Server.MapPath("~/Musiques"), +t.ID + "-" + t.Titre + t.Format);
+                byte[] fileBytes = GetFile(fullName);
+                return File(
+                    fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fullName);
+            }
+            catch (Exception)
+            {
+                return Error();
+            }
+        }
+
+        byte[] GetFile(string s)
+        {
+            System.IO.FileStream fs = System.IO.File.OpenRead(s);
+            byte[] data = new byte[fs.Length];
+            int br = fs.Read(data, 0, data.Length);
+            if (br != fs.Length)
+                throw new System.IO.IOException(s);
+            return data;
         }
 
         protected override void Dispose(bool disposing)

@@ -12,7 +12,6 @@ namespace TuneBoothProject.App_Start
         {
             Exception ex = filterContext.Exception;
             filterContext.ExceptionHandled = true;
-
             var model = new HandleErrorInfo(filterContext.Exception, "Controller", "Action");
             filterContext.Result = new ViewResult()
             {
