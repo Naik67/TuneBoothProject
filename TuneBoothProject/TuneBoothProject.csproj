@@ -352,6 +352,7 @@
     <Content Include="Views\PlaylistCompoes\Edit.cshtml" />
     <Content Include="Views\PlaylistCompoes\Index.cshtml" />
     <Content Include="Views\Playlists\AllTunes.cshtml" />
+    <Content Include="Views\Tunes\Download.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
