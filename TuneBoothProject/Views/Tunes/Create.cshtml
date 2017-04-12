@@ -75,6 +75,7 @@
             @Html.Label("Upload File");
             @*<label for="file">Upload Tune:</label>*@
             <input type="file" name="file" id="file" />
+            @Html.ValidationMessage("Tune","Il manque un fichier",  new { @class = "text-danger" })
         </div>
 
         <div class="form-group">

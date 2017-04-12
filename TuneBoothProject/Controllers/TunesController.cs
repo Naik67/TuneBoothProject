@@ -17,7 +17,11 @@ namespace TuneBoothProject.Controllers
     public class TunesController : BaseController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        private static string[] mediaExtensions = {
+    ".FLAC", ".ALAC", ".SHORTEN", ".AC-3", ".MP3",
+    ".MP3PRO", ".MID", ".MIDI", ".WMA", ".AU", ".OGG", ".RMA",
+    ".AA", ".AAC", ".MPEG-2", ".ATRACT",
+};
         // GET: Tunes
         public ActionResult Index()
         {
@@ -54,6 +58,13 @@ namespace TuneBoothProject.Controllers
             return View();
         }
 
+
+
+        static bool IsMediaFile(string path)
+        {
+            return -1 <Array.IndexOf(mediaExtensions, Path.GetExtension(path).ToUpperInvariant());
+        }
+
         // POST: Tunes/Create
         // Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
         // plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -65,31 +76,35 @@ namespace TuneBoothProject.Controllers
             ViewBag.Message = "début";
             if (User.Identity.IsAuthenticated)
             {
-
-                var user = User.Identity;
-                ViewBag.Name = user.Name;
-
-                ViewBag.displayMenu = "No";
-
                 if (!isAdminUser())
                 {
-                    ViewBag.displayMenu = "Yes";
                     if (ModelState.IsValid)
                     {
+                        int file = 0;
                         if (!Directory.Exists(Server.MapPath("~/Musiques")))
                             Directory.CreateDirectory(Server.MapPath("~/Musiques"));
                         foreach (string upload in Request.Files)
                         {
                             if (Request.Files[upload].ContentLength == 0) continue;
+                            if (IsMediaFile(Request.Files[upload].FileName)) continue;
+
                             string pathToSave = Server.MapPath("~/Musiques/");
                             string filename = Path.GetFileName(Request.Files[upload].FileName);
-                            Request.Files[upload].SaveAs(Path.Combine(pathToSave, filename));
+                            Request.Files[upload].SaveAs(Path.Combine(pathToSave, +tune.ID+"-"+tune.Titre + Path.GetExtension(Request.Files[upload].FileName)));
+                            file++;
                         }
-
-                        TempData["shortMessage"] = "Musique ajoutée";
-                        db.Tunes.Add(tune);
-                        db.SaveChanges();
-                        return RedirectToAction("Index");
+                        if(file>0)
+                        {
+                            TempData["shortMessage"] = "Musique ajoutée";
+                            db.Tunes.Add(tune);
+                            db.SaveChanges();
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            TempData["shortMessage"] = "Fichier manquant";
+                            ViewBag.Message = "Fichier manquant";
+                        }
                     }
 
                     return View(tune);
