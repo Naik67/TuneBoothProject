@@ -21,7 +21,6 @@ namespace TuneBooth.Models
 
         public Tune()
         {
-            this.ID = 0;
         }
 
         public Tune(string titre, int artisteid, double prix, DateTime sortie, string genre, string format, int albumid)

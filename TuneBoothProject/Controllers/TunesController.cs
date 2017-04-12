@@ -49,6 +49,7 @@ namespace TuneBoothProject.Controllers
             }
             ViewBag.artiste = db.Artistes.Find(tune.ArtisteID);
             ViewBag.album = db.Albums.Find(tune.AlbumID);
+            ViewBag.filename = "extract-" + tune.ID + "-" + tune.Titre + "." + tune.Format;
             return View(tune);
         }
 
@@ -91,21 +92,23 @@ namespace TuneBoothProject.Controllers
                         db.SaveChanges();
                         string pathToSave = Server.MapPath("~/Musiques/");
                         string filename = Path.GetFileName(Request.Files[upload].FileName);
-                        Request.Files[upload].SaveAs(Path.Combine(pathToSave, +tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName)));
+                        string tosave = Path.Combine(pathToSave, +tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName));
+                        tosave = tosave.Replace(' ', '_');
+                        Request.Files[upload].SaveAs(tosave);
 
                         //Création de l'extrait - @N.
-                        string songname = tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName);
-                        var trackDir = Server.MapPath("~/Musiques");
-                        var trackPath = Path.Combine(trackDir, songname);
-                        var ffmpegDir = Server.MapPath("~/ffmpeg");
-                        var ffmpegPath = Path.Combine(ffmpegDir, "bin/ffmpeg.exe");
-                        var trailerDir = Server.MapPath("~/Trailer");
-                        var trackTrailerPath = Path.Combine(trailerDir, "extract-" + songname);
-                        var trackTrailerUrl = Path.Combine(trailerDir, "extract-" + songname);
-                        System.Diagnostics.Process p = new System.Diagnostics.Process();
-                        p.StartInfo = new System.Diagnostics.ProcessStartInfo(ffmpegPath, "-t 30 -i " + trackPath + " " + trackTrailerPath);
-                        p.Start();
-                        p.WaitForExit();
+                        //string songname = tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName);
+                        //var trackDir = Server.MapPath("~/Musiques");
+                        //var trackPath = Path.Combine(trackDir, songname);
+                        //var ffmpegDir = Server.MapPath("~/ffmpeg");
+                        //var ffmpegPath = Path.Combine(ffmpegDir, "bin/ffmpeg.exe");
+                        //var trailerDir = Server.MapPath("~/Trailer");
+                        //var trackTrailerPath = Path.Combine(trailerDir, "extract-" + songname);
+                        //var trackTrailerUrl = Path.Combine(trailerDir, "extract-" + songname);
+                        //System.Diagnostics.Process p = new System.Diagnostics.Process();
+                        //p.StartInfo = new System.Diagnostics.ProcessStartInfo(ffmpegPath, "-t 30 -i " + trackPath + " " + trackTrailerPath);
+                        //p.Start();
+                        //p.WaitForExit();
 
 
                         TempData["shortMessage"] = Request.Files[upload].FileName;
@@ -225,15 +228,46 @@ namespace TuneBoothProject.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Download(int id)
+
+        public ActionResult Download(int? id)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+
+                var user = User.Identity;
+                ViewBag.Name = user.Name;
+
+                if (id == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+                Tune tune = db.Tunes.Find(id);
+                ViewBag.artiste = db.Artistes.Find(tune.ArtisteID);
+                ViewBag.album = db.Albums.Find(tune.AlbumID);
+                if (tune == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(tune);
+            }
+            else
+                return View("Error");
+        }
+
+
+        [HttpPost, ActionName("Download")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DownloadValidate(int? id)
         {
             try
             {
                 Tune t = db.Tunes.Find(id);
-                string fullName = Path.Combine(Server.MapPath("~/Musiques"), +t.ID + "-" + t.Titre + t.Format);
+                ViewBag.Message = Server.MapPath("~/Musiques") + t.ID + "-" + t.Titre + t.Format;
+                string fullName = Path.Combine(Server.MapPath("~/Musiques"), +t.ID + "-" + t.Titre +"."+ t.Format);
+                fullName = fullName.Replace(' ', '_');
                 byte[] fileBytes = GetFile(fullName);
                 return File(
-                    fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fullName);
+                    fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, t.Titre + "." + t.Format);
             }
             catch (Exception)
             {
