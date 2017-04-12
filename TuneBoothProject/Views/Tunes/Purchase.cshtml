@@ -1,0 +1,20 @@
+﻿
+@{
+    ViewBag.Title = "Purchase";
+}
+
+
+<h2>@ViewBag.tune.Titre</h2>
+<form>
+    Numéro de carte bancaire: <input type="text" name="num"><br>
+    Date d'expiration: <input type="text" name="exp"><br>
+    Cryptogramme visuel: <input type="text" name="crypt"><br>
+</form>
+<form action="~/Tunes/ConfirmPurchase">
+    <input type="submit" value="Submit">
+</form> 
+
+
+<div>
+    @Html.ActionLink("Retour à la liste", "Index")
+</div>
