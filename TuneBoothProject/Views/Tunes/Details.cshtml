@@ -68,6 +68,12 @@
 
     </dl>
 </div>
+<div>
+    <audio controls="controls">
+        <source src="~/Trailer/@ViewBag.filename" type="audio/mp3" />
+    </audio>
+</div>
+
 <p>
     @Html.ActionLink("Acheter", "Purchase", new { id = Model.ID }) |
     @Html.ActionLink("Editer", "Edit", new { id = Model.ID }) |
