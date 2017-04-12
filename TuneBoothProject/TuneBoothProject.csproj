@@ -199,6 +199,7 @@
     <Compile Include="Controllers\AlbumsController.cs" />
     <Compile Include="Controllers\ArtistesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MagasinController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TunesController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -302,7 +303,8 @@
     <Content Include="Views\Tunes\Details.cshtml" />
     <Content Include="Views\Tunes\Edit.cshtml" />
     <Content Include="Views\Tunes\Index.cshtml" />
-    <Content Include="Views\Home\Magasin.cshtml" />
+    <Content Include="Views\Magasin\Index.cshtml" />
+    <Content Include="Views\Magasin\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
