@@ -23,18 +23,37 @@ namespace TuneBoothProject.Controllers
         public ActionResult Search(string search)
         {
             List<Tune> tunes = new List<Tune>();
+            List<Album> albums = new List<Album>();
+            List<Artiste> artistes = new List<Artiste>();
             if (!String.IsNullOrEmpty(search))
             {
                 foreach (Tune tune in db.Tunes.ToList())
                 {
-                    ViewBag.Search = search;
-                    if (tune.Titre.Contains(search))
+                    if (tune.Titre.ToLower().Contains(search.ToLower()))
                     {
                         tunes.Add(tune);
                     }
                 }
+                foreach (Album album in db.Albums.ToList())
+                {
+                    if (album.Titre.ToLower().Contains(search.ToLower()))
+                    {
+                        albums.Add(album);
+                    }
+                }
+                foreach (Artiste artiste in db.Artistes.ToList())
+                {
+                    if (artiste.NomArtiste.ToLower().Contains(search.ToLower()))
+                    {
+                        artistes.Add(artiste);
+                    }
+                }
             }
-            return View(tunes); 
+            ViewBag.Search = search;
+            ViewBag.tunesearch = tunes;
+            ViewBag.albumsearch = albums;
+            ViewBag.artistesearch = artistes;
+            return View(); 
         }
     }
 }

@@ -1,20 +1,60 @@
-﻿@model IEnumerable<TuneBooth.Models.Tune>
-
-@{
+﻿@{
     ViewBag.Title = "Search";
 }
 
-<h2>Results for @ViewBag.Search</h2>
+<h2>Résultats pour @ViewBag.Search</h2>
 
-@foreach (var music in Model)
+<h3>Musiques</h3>
+@if (ViewBag.tunesearch.Count == 0)
 {
-    <h3>Tune</h3>
+    <p> Aucune musique trouvée.</p>
+}
+else
+{
     <ul>
-        <li>@music.Titre;</li>
-        <li>@music.ArtisteID</li>
-        <li>@music.AlbumID</li>
-        <li>@music.Genre</li>
-        <li>@music.Format</li>
-        <li>@music.Prix €</li>
+        @foreach (var tune in ViewBag.tunesearch)
+        {
+            <li><a href="~/Tunes/Details/@tune.ID">@tune.Titre</a></li>
+        }
     </ul>
 }
+<br>
+
+
+<h3>Albums</h3>
+@if (ViewBag.albumsearch.Count == 0)
+{
+    <p> Aucun album trouvé.</p>
+}
+else
+{
+    <ul>
+        @foreach (var album in ViewBag.albumsearch)
+        {
+            <li><a href="~/Albums/Details/@album.ID">@album.Titre</a></li>
+        }
+    </ul>
+}
+<br>
+
+
+<h3>Artistes</h3>
+@if (ViewBag.artistesearch.Count == 0)
+{
+    <p> Aucun artiste trouvé.</p>
+}
+else
+{
+    <ul>
+        @foreach (var artiste in ViewBag.artistesearch)
+        {
+        <li><a href="~/Artistes/Details/@artiste.ID">@artiste.NomArtiste</a></li>
+        }
+    </ul>
+}
+<br>
+
+<p>
+    @Html.ActionLink("Retour au magasin", "Index")
+</p>
+
