@@ -62,7 +62,7 @@ namespace TuneBoothProject.Controllers
 
         static bool IsMediaFile(string path)
         {
-            return -1 <Array.IndexOf(mediaExtensions, Path.GetExtension(path).ToUpperInvariant());
+            return !(-1 != Array.IndexOf(mediaExtensions, Path.GetExtension(path).ToUpperInvariant()));
         }
 
         // POST: Tunes/Create
@@ -92,18 +92,20 @@ namespace TuneBoothProject.Controllers
                             string filename = Path.GetFileName(Request.Files[upload].FileName);
                             Request.Files[upload].SaveAs(Path.Combine(pathToSave, +tune.ID+"-"+tune.Titre + Path.GetExtension(Request.Files[upload].FileName)));
                             file++;
+                            TempData["shortMessage"] = Request.Files[upload].FileName;
                         }
                         if(file>0)
                         {
-                            TempData["shortMessage"] = "Musique ajoutée";
+                            //TempData["shortMessage"] = "Musique ajoutée";
                             db.Tunes.Add(tune);
                             db.SaveChanges();
                             return RedirectToAction("Index");
                         }
                         else
                         {
-                            TempData["shortMessage"] = "Fichier manquant";
+                            TempData["shortMessage"] = "Fichier manquant ou au mauvais format";
                             ViewBag.Message = "Fichier manquant";
+                            return RedirectToAction("Index");
                         }
                     }
 
@@ -178,6 +180,24 @@ namespace TuneBoothProject.Controllers
                 return HttpNotFound();
             }
             return View(tune);
+        }
+
+        public ActionResult Purchase(int id)
+        {
+            ViewBag.tune = db.Tunes.Find(id);
+            TempData["tuneID"] = id;
+            return View();
+        }
+
+        public ActionResult ConfirmPurchase()
+        {
+            int tuneid = Int32.Parse(TempData["tuneID"].ToString());
+            HistoriquePayement hp = new HistoriquePayement();
+            hp.UserID = Int32.Parse(User.Identity.GetUserId());
+            hp.TuneID = tuneid;
+            db.HistoriquePayements.Add(hp);
+            db.SaveChanges();
+            return View();
         }
 
         // POST: Tunes/Delete/5
