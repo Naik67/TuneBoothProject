@@ -193,7 +193,7 @@ namespace TuneBoothProject.Controllers
         {
             int tuneid = Int32.Parse(TempData["tuneID"].ToString());
             HistoriquePayement hp = new HistoriquePayement();
-            hp.UserID = Int32.Parse(User.Identity.GetUserId());
+            hp.UserID = User.Identity.GetUserId();
             hp.TuneID = tuneid;
             db.HistoriquePayements.Add(hp);
             db.SaveChanges();

@@ -10,7 +10,7 @@ namespace TuneBoothProject.Models
     {
         [Key]
         public int ID { get; set; }
-        public int UserID { get; set; }
+        public string UserID { get; set; }
         public int TuneID { get; set; }
 
         public HistoriquePayement()
@@ -18,7 +18,7 @@ namespace TuneBoothProject.Models
 
         }
 
-        public HistoriquePayement(int id, int userid, int tuneid)
+        public HistoriquePayement(int id, string userid, int tuneid)
         {
             this.ID = id;
             this.UserID = userid;
