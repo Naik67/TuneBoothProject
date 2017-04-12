@@ -1,0 +1,20 @@
+﻿@model IEnumerable<TuneBooth.Models.Tune>
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Results for @ViewBag.Search</h2>
+
+@foreach (var music in Model)
+{
+    <h3>Tune</h3>
+    <ul>
+        <li>@music.Titre;</li>
+        <li>@music.ArtisteID</li>
+        <li>@music.AlbumID</li>
+        <li>@music.Genre</li>
+        <li>@music.Format</li>
+        <li>@music.Prix €</li>
+    </ul>
+}

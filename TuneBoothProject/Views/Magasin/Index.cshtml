@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Magasin";
+}
+
+<h2>Magasin</h2>
+
+<form id="frmsearch" action="~/Magasin/Search" method="get">
+    <input id="search" name="search" style="width:275px;" />
+    <input id="submit" name="submit" type="submit" style="font-weight:bold;" value="Chercher" />
+</form>
+
+
+@foreach ( var music in ViewBag.Tunes)
+{
+    
+    <h3><a href="~/Tunes/Details/@music.ID">@music.Titre</a></h3>
+        <ul>
+            <li>@music.ArtisteID</li>
+            <li>@music.AlbumID</li>
+            <li>@music.Genre</li>
+            <li>@music.Format</li>
+            <li>@music.Prix €</li>
+        </ul>
+}
