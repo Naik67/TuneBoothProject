@@ -87,6 +87,8 @@ namespace TuneBoothProject.Controllers
                         if (Request.Files[upload].ContentLength == 0) continue;
                         if (IsMediaFile(Request.Files[upload].FileName)) continue;
 
+                        db.Tunes.Add(tune);
+                        db.SaveChanges();
                         string pathToSave = Server.MapPath("~/Musiques/");
                         string filename = Path.GetFileName(Request.Files[upload].FileName);
                         Request.Files[upload].SaveAs(Path.Combine(pathToSave, +tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName)));
@@ -97,8 +99,6 @@ namespace TuneBoothProject.Controllers
                     if (file > 0)
                     {
                         //TempData["shortMessage"] = "Musique ajoutée";
-                        db.Tunes.Add(tune);
-                        db.SaveChanges();
                         return RedirectToAction("Index");
                     }
                     else
