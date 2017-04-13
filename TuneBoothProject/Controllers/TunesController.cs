@@ -146,12 +146,11 @@ namespace TuneBoothProject.Controllers
                         db.SaveChanges();
                         string pathToSave = Server.MapPath("~/Musiques/");
                         string filename = Path.GetFileName(Request.Files[upload].FileName);
-                        string tosave = Path.Combine(pathToSave, +tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName));
-                        tosave = tosave.Replace(' ', '_');
+                        string tosave = Path.Combine(pathToSave, +tune.ID + "-" + tune.Titre.Replace(' ', '_') + Path.GetExtension(Request.Files[upload].FileName));
                         Request.Files[upload].SaveAs(tosave);
 
                         //Création de l'extrait - @N.
-                        //string songname = tune.ID + "-" + tune.Titre + Path.GetExtension(Request.Files[upload].FileName);
+                        //string songname = tune.ID + "-" + tune.Titre.Replace(' ', '_') + Path.GetExtension(Request.Files[upload].FileName);
                         //var trackDir = Server.MapPath("~/Musiques");
                         //var trackPath = Path.Combine(trackDir, songname);
                         //var ffmpegDir = Server.MapPath("~/ffmpeg");
