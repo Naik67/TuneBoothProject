@@ -24,7 +24,7 @@
 
         <dd>
             <a href="~/Artistes/Details/@ViewBag.artiste.ID">@ViewBag.artiste.NomArtiste</a>
-</dd>
+        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Prix)
@@ -64,10 +64,50 @@
 
         <dd>
             <a href="~/Albums/Details/@ViewBag.album.ID">@ViewBag.album.Titre</a>
-</dd>
+        </dd>
+
+        <dt>
+            Note
+        </dt>
+
+        <dd>
+            @ViewBag.note
+        </dd>
 
     </dl>
 </div>
+<div>
+    @if (ViewBag.comments.Count != 0)
+    {
+        <h3>Commentaires</h3>
+        <ul>
+            @foreach (var c in ViewBag.comments)
+            {
+                <li>@c.UserID à dit : @c.Content</li>
+            }
+        </ul>
+    }
+</div>
+
+<div>
+    @if (!ViewBag.noted)
+    {
+        <form action="~/Tunes/SendNote">
+            Note: <input type="number" name="note" min="0" max="5">
+            <input type="submit" value="Submit">
+        </form>
+    }
+</div>
+<div>
+    @if (!ViewBag.commented)
+    {
+        <form action="~/Tunes/SendComment">
+            Commentaire: <input type="text" name="comment">
+            <input type="submit" value="Submit">
+        </form>
+    }
+</div>
+
 <div>
     <audio controls="controls">
         <source src="~/Trailer/@ViewBag.filename" type="audio/mp3" />

@@ -201,10 +201,12 @@
     <Compile Include="Controllers\AlbumsController.cs" />
     <Compile Include="Controllers\ArtistesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CommentsController.cs" />
     <Compile Include="Controllers\HistoriquePayementsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MagasinController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Controllers\PlaylistCompoesController.cs" />
     <Compile Include="Controllers\PlaylistsController.cs" />
     <Compile Include="Controllers\TunesController.cs" />
@@ -243,14 +245,20 @@
     <Compile Include="Migrations\201704121753103_PlaylistCompo.Designer.cs">
       <DependentUpon>201704121753103_PlaylistCompo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704122254518_Rezo.cs" />
+    <Compile Include="Migrations\201704122254518_Rezo.Designer.cs">
+      <DependentUpon>201704122254518_Rezo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artiste.cs" />
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\HistoriquePayement.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ModelsVM.cs" />
+    <Compile Include="Models\Note.cs" />
     <Compile Include="Models\Playlist.cs" />
     <Compile Include="Models\PlaylistCompo.cs" />
     <Compile Include="Models\Tune.cs" />
@@ -353,6 +361,16 @@
     <Content Include="Views\PlaylistCompoes\Index.cshtml" />
     <Content Include="Views\Playlists\AllTunes.cshtml" />
     <Content Include="Views\Tunes\Download.cshtml" />
+    <Content Include="Views\Comments\Create.cshtml" />
+    <Content Include="Views\Comments\Delete.cshtml" />
+    <Content Include="Views\Comments\Details.cshtml" />
+    <Content Include="Views\Comments\Edit.cshtml" />
+    <Content Include="Views\Comments\Index.cshtml" />
+    <Content Include="Views\Notes\Create.cshtml" />
+    <Content Include="Views\Notes\Delete.cshtml" />
+    <Content Include="Views\Notes\Details.cshtml" />
+    <Content Include="Views\Notes\Edit.cshtml" />
+    <Content Include="Views\Notes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -391,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704121753103_PlaylistCompo.resx">
       <DependentUpon>201704121753103_PlaylistCompo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704122254518_Rezo.resx">
+      <DependentUpon>201704122254518_Rezo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

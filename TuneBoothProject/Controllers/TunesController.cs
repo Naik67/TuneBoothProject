@@ -50,7 +50,61 @@ namespace TuneBoothProject.Controllers
             ViewBag.artiste = db.Artistes.Find(tune.ArtisteID);
             ViewBag.album = db.Albums.Find(tune.AlbumID);
             ViewBag.filename = "extract-" + tune.ID + "-" + tune.Titre + "." + tune.Format;
+
+
+
+            ViewBag.commented = false;
+            List<Comment> comments = new List<Comment>();
+            foreach (var c in db.Comments.ToList())
+            {
+                if (c.TuneID == id)
+                    comments.Add(c);
+                if (c.UserID == User.Identity.GetUserId())
+                    ViewBag.commented = true;
+            }
+            ViewBag.noted = false;
+            double note = 0;
+            int nbnote = 0;
+            foreach (var n in db.Notes.ToList())
+            {
+                if (n.TuneID == id)
+                {
+                    note += n.Value;
+                    nbnote++;
+                }
+                if (n.UserID == User.Identity.GetUserId())
+                    ViewBag.noted = true;
+            }
+            if (nbnote > 0)
+                note = note / nbnote;
+            ViewBag.comments = comments;
+            ViewBag.fullcomm = db.Comments.ToList();
+            ViewBag.note = note;
+            ViewBag.users = db.Users.ToList();
+            TempData["tuneID"] = id;
             return View(tune);
+        }
+
+        public ActionResult SendNote()
+        {
+            Note note = new Note();
+            note.UserID = User.Identity.GetUserId();
+            note.TuneID = Int32.Parse(TempData["tuneID"].ToString());
+            note.Value = Convert.ToInt32(Request.QueryString["note"]) % 5;
+            db.Notes.Add(note);
+            db.SaveChanges();
+            return RedirectToAction("Details/" + Int32.Parse(TempData["tuneID"].ToString()));
+        }
+
+        public ActionResult SendComment(string comm)
+        {
+            Comment comment = new Comment();
+            comment.UserID = User.Identity.GetUserId();
+            comment.TuneID = Int32.Parse(TempData["tuneID"].ToString());
+            comment.Content = Request.QueryString["comment"];
+            db.Comments.Add(comment);
+            db.SaveChanges();
+            return RedirectToAction("Details/" + Int32.Parse(TempData["tuneID"].ToString()));
         }
 
         // GET: Tunes/Create
